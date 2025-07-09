@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tra cứu điểm thi học sinh</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 30px; }
+    h1 { color: #2c3e50; }
+    input, select, button { padding: 10px; font-size: 16px; margin-top: 10px; }
+    #ketQua { margin-top: 20px; background: #fff; padding: 15px; border-radius: 5px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+    label { display: block; margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Tra cứu điểm thi học sinh</h1>
+
+  <label for="searchBox">Nhập tên hoặc ngày sinh học sinh:</label>
+  <input type="text" id="searchBox" placeholder="VD: HOÀNG MINH ANH hoặc 17/11/2010">
+
+  <label for="filterGender">Lọc theo giới tính:</label>
+  <select id="filterGender">
+    <option value="">-- Tất cả --</option>
+    <option value="Nam">Nam</option>
+    <option value="Nữ">Nữ</option>
+  </select>
+
+  <label for="filterSchool">Lọc theo trường:</label>
+  <select id="filterSchool">
+    <option value="">-- Tất cả --</option>
+    <option value="Trường PTDTNT Sa Thầy">Trường PTDTNT Sa Thầy</option>
+    <option value="Trường PTTH DTNT Tỉnh Kon Tum">Trường PTTH DTNT Tỉnh Kon Tum</option>
+    <option value="Phân hiệu Trường PTDTNT tỉnh tại huyện Ia H’Drai">Phân hiệu Trường PTDTNT tỉnh tại huyện Ia H’Drai</option>
+  </select>
+
+  <button onclick="traCuu()">Tìm kiếm</button>
+
+  <div id="ketQua"></div>
+
+  <script>
+    const data = [
+  { ten: "TỐNG THANH BÌNH", ngay_sinh: "06/09/2010", gioi_tinh: "Nam", truong: "Trường PTDTNT Sa Thầy", tong_diem: 26.5 },
+  { ten: "LÊ THÙY DUNG", ngay_sinh: "17/11/2010", gioi_tinh: "Nữ", truong: "Phân hiệu Trường PTDTNT tỉnh tại huyện Ia H’Drai", tong_diem: 21.65 },
+  { ten: "NGUYỄN THỊ THÙY DUNG", ngay_sinh: "05/05/2010", gioi_tinh: "Nữ", truong: "Trường PTDTNT Sa Thầy", tong_diem: 20.8 },
+  { ten: "ĐẶNG LƯU DIỆU HIỀN", ngay_sinh: "16/01/2010", gioi_tinh: "Nữ", truong: "Trường PTTH DTNT Tỉnh Kon Tum", tong_diem: 27.0 },
+  { ten: "NGUYỄN THỊ DIỆU HIỀN", ngay_sinh: "04/04/2010", gioi_tinh: "Nữ", truong: "Trường PTDTNT Sa Thầy", tong_diem: 26.2 },
+  { ten: "NGUYỄN VÕ GIA HÂN", ngay_sinh: "25/04/2010", gioi_tinh: "Nữ", truong: "Phân hiệu Trường PTDTNT tỉnh tại huyện Ia H’Drai", tong_diem: 25.05 },
+  { ten: "TRẦN ĐĂNG HOÀNG", ngay_sinh: "22/05/2010", gioi_tinh: "Nam", truong: "Trường PTDTNT Sa Thầy", tong_diem: 24.75 },
+  { ten: "HOÀNG MINH ANH", ngay_sinh: "17/11/2010", gioi_tinh: "Nữ", truong: "Trường PTDTNT Sa Thầy", tong_diem: 25.75 },
+  { ten: "TỐNG ĐỨC ANH", ngay_sinh: "11/10/2010", gioi_tinh: "Nam", truong: "Trường PTTH DTNT Tỉnh Kon Tum", tong_diem: 30.15 },
+  { ten: "NGUYỄN QUỐC BẢO", ngay_sinh: "09/09/2010", gioi_tinh: "Nam", truong: "Trường PTTH DTNT Tỉnh Kon Tum", tong_diem: 29.3 }
+];
+
+    function traCuu() {
+      const keyword = document.getElementById('searchBox').value.trim().toLowerCase();
+      const gender = document.getElementById('filterGender').value;
+      const school = document.getElementById('filterSchool').value;
+
+      const results = data.filter(hs => {
+        const matchKeyword = hs.ten.toLowerCase().includes(keyword) || hs.ngay_sinh.toLowerCase().includes(keyword);
+        const matchGender = gender === '' || hs.gioi_tinh === gender;
+        const matchSchool = school === '' || hs.truong === school;
+        return matchKeyword && matchGender && matchSchool;
+      });
+
+      const output = results.length > 0 ? results.map(hs =>
+        `<p>
+          <strong>Họ tên:</strong> ${hs.ten}<br>
+          <strong>Ngày sinh:</strong> ${hs.ngay_sinh}<br>
+          <strong>Giới tính:</strong> ${hs.gioi_tinh}<br>
+          <strong>Trường trúng tuyển:</strong> ${hs.truong}<br>
+          <strong>Tổng điểm:</strong> ${hs.tong_diem}
+        </p>`
+      ).join('') : '<p>Không tìm thấy kết quả.</p>';
+
+      document.getElementById('ketQua').innerHTML = output;
+    }
+  </script>
+</body>
+</html>
